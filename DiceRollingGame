@@ -1,0 +1,124 @@
+import java.util.*;
+import java.lang.*;
+
+class Rextester
+{ 
+    public static void main(String args[])
+    {
+        // instantiate game object
+        Game game = new Game();
+        
+        // start game play
+        game.play();
+    }
+}
+
+//New Class
+
+class Player {
+    int id;
+    String name;
+    int score;
+    
+    Player(int id, String name) {
+        this.id = id;
+        this.name = name;
+        this.score = 0;
+    }
+    
+    /**
+     *  Update player score
+     */
+    public void updateScore(int currentDice) {
+        score += currentDice;
+        System.out.format("\n%s \tscore = %d\n", name, score);
+    }
+    
+    @Override
+    public String toString() {
+        return name + " [" + score + "]";
+    }
+}
+    
+    
+//New Class
+
+class Dice {
+    /**
+     *  Roll the dice and return random number between 1 and 6 (both inclusive)
+     */
+    public int roll() {
+        return 1 + (int)(Math.random() * 6);
+    }
+}
+
+
+//New Class
+
+class Game {
+    Player player1;
+    Player player2;
+    Dice dice;
+    
+    /**
+     *  Game object constructor
+     */
+    Game() {
+        // instantiate two players
+        player1 = new Player(1, "Dave");
+        player2 = new Player(2, "Tang");
+        
+        // instantiate dice object
+        dice = new Dice();
+    }
+    
+    /**
+     *  Display winner based on score value
+     */
+    private Player winner() {
+        if(player1.score > player2.score) {
+            return player1;
+        } else if(player2.score > player1.score) {
+            return player2;
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     *  Play the game with following sequential steps:
+     *  1. Roll dice
+     *  2. Update score of current player based on dice value from above step.
+     *  3. Switch current player.
+     *  4. Repeat steps from 1 until playCounter is zero (repeat that many times).
+     *  5. Outside above loop, check which player has higher score. Display winner, or tie.
+     */
+    public void play() {
+        Player currentPlayer = player1; // start with this player
+        int currentDice;
+        int playCounter = 5;  // play till this count
+        
+        while(playCounter-- > 0) {
+            // play dice
+            currentDice = dice.roll();
+            
+            // update score of current player
+            currentPlayer.updateScore(currentDice);
+            
+            // switch players
+            if(currentPlayer == player1) {
+                currentPlayer = player2;
+            } else {
+                currentPlayer = player1;
+            }
+        
+        // display winner, or game tie
+        if(winner() != null) {
+            System.out.println(winner() + " WINS!");
+        } else {
+            System.out.println("Game tie !");
+        }
+    }
+    }
+}
+
